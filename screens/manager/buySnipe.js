@@ -1,3 +1,4 @@
+import isContract from "../../helpers/isContract.js";
 import isValidPrivateKey from "../../hooks/isValidPrivateKey.js";
 import { readUserData, writeUserData } from "../../index.js";
 
@@ -20,9 +21,9 @@ export const buySnipe = (scene) => {
       ctx.scene.enter("start");
     } else {
       // Replace this with your input validation logic
-      const isPrivateKey = isValidPrivateKey(input.toString());
+      const isContracts = isContract(input.toString());
 
-      if (isPrivateKey) {
+      if (isContracts) {
         const userId = ctx.from.id;
         const userData = readUserData();
         if (!userData.users[userId]) {
@@ -39,7 +40,7 @@ export const buySnipe = (scene) => {
           reply_to_message_id: ctx.session.lastMessageId,
         });
         // Add any further processes here
-        ctx.scene.leave();
+        //setTimeout(() => ctx.scene.enter("start"), 1500);
       } else {
         ctx
           .reply("Please ener a valid ETH address!.", {

@@ -1,4 +1,5 @@
-import isValidPrivateKey from "../../hooks/isValidPrivateKey.js";
+import isContract from "../../helpers/isContract.js";
+import { isInteger } from "../../helpers/isInteger.js";
 import { readUserData, writeUserData } from "../../index.js";
 
 export const buy = (scene) => {
@@ -14,15 +15,15 @@ export const buy = (scene) => {
       });
   });
 
-  scene.on("text", (ctx) => {
+  scene.on("text", async (ctx) => {
     const input = ctx.message.text;
     if (String(input) === "/start") {
       ctx.scene.enter("start");
     } else {
       // Replace this with your input validation logic
-      const isPrivateKey = isValidPrivateKey(input.toString());
+      const isNum = isInteger(input.toString());
 
-      if (isPrivateKey) {
+      if (isNum) {
         const userId = ctx.from.id;
         const userData = readUserData();
         if (!userData.users[userId]) {
@@ -39,7 +40,7 @@ export const buy = (scene) => {
           reply_to_message_id: ctx.session.lastMessageId,
         });
         // Add any further processes here
-        ctx.scene.leave();
+        //setTimeout(() => ctx.scene.enter("start"), 1500);
       } else {
         ctx
           .reply("Only integers are allowed as buy amount!.", {
